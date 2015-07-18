@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LineCount", "LineCount\Line
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LineCountGui", "LineCountGui\LineCountGui.vcxproj", "{D724165A-E7F7-4239-A932-8D080FA28E0B}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryptfile", "cryptfile\cryptfile.vcxproj", "{457C6C68-37BE-4403-81A2-5E2976A6F737}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,27 @@ Global
 		{D724165A-E7F7-4239-A932-8D080FA28E0B}.Template|Win32.ActiveCfg = Release|Win32
 		{D724165A-E7F7-4239-A932-8D080FA28E0B}.Template|Win32.Build.0 = Release|Win32
 		{D724165A-E7F7-4239-A932-8D080FA28E0B}.Template|x86.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|Win32.ActiveCfg = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|Win32.Build.0 = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|x86.ActiveCfg = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Debug|x86.Build.0 = Debug|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|Any CPU.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|Win32.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|Win32.Build.0 = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|x86.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Release|x86.Build.0 = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|Any CPU.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|Mixed Platforms.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|Mixed Platforms.Build.0 = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|Win32.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|Win32.Build.0 = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|x86.ActiveCfg = Release|Win32
+		{457C6C68-37BE-4403-81A2-5E2976A6F737}.Template|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
