@@ -1,6 +1,6 @@
 # General
 
-Various small projects of educational interesst for Christoph Stoepel.
+Various small projects of educational interest for Christoph Stoepel.
 
 # Details
 
