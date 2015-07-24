@@ -2,19 +2,16 @@
 //
 
 #include "stdafx.h"
-#define SODIUM_STATIC
-#include <sodium.h>
+
+#include <sha.h>
+#include <pwdbased.h>
+#include <salsa.h>
+#include <osrng.h>
 
 #define CHUNK_SIZE (16*1024)
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	if (sodium_init() == -1)
-	{
-		_tprintf(_T("Could not initialize cryptography subsystem!\n"));
-		return 1;
-	}
-
 	if (argc < 3)
 	{
 		_tprintf(_T("usage: cryptfile [-d] [-o <outfile>] <password> <file>\n"));
@@ -56,23 +53,18 @@ int _tmain(int argc, _TCHAR* argv[])
 		_tcscpy_s(szSourceFile, MAX_PATH, argv[argc - 1]);
 	}
 
-	unsigned char pKey[crypto_stream_KEYBYTES];
-	unsigned char pNonce[crypto_stream_NONCEBYTES];
-	unsigned char pSalt[crypto_pwhash_scryptsalsa208sha256_SALTBYTES];
-
-	// generate simple password salt (unique for this application)
-	for (size_t i = 2; i < crypto_pwhash_scryptsalsa208sha256_SALTBYTES; i++)
-		pSalt[i] = (i * 2) & 0xFF;
+	unsigned char pKey[32];
+	unsigned char pSalt[4]; // unique for this application
 	pSalt[0] = 'C';
 	pSalt[1] = 'S';
+	pSalt[2] = 'X';
+	pSalt[3] = '1';
 
-	// generate key (derived from password)
-	crypto_pwhash_scryptsalsa208sha256(
-		pKey, sizeof(pKey),
-		reinterpret_cast<const char*>(argv[argc - 2]), _tcslen(argv[argc - 2]) * sizeof(TCHAR),
-		pSalt,
-		crypto_pwhash_scryptsalsa208sha256_OPSLIMIT_INTERACTIVE,
-		crypto_pwhash_scryptsalsa208sha256_MEMLIMIT_INTERACTIVE);
+	CryptoPP::PKCS5_PBKDF2_HMAC<CryptoPP::SHA1> pbkdf2;
+	pbkdf2.DeriveKey(
+		pKey, sizeof(pKey), 0,
+		reinterpret_cast<const unsigned char*>(argv[argc - 2]), _tcslen(argv[argc - 2]) * sizeof(TCHAR),
+		pSalt, sizeof(pSalt), 1);
 
 	HANDLE hSourceFile = ::CreateFile(szSourceFile, GENERIC_READ, 0, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 	if (hSourceFile == INVALID_HANDLE_VALUE)
@@ -93,21 +85,26 @@ int _tmain(int argc, _TCHAR* argv[])
 	DWORD dwBytesRead = 0;
 	DWORD dwBytesWritten = 0;
 
+	unsigned char iv[8];
+
 	if (bDecrypt)
 	{
 		// load file unique number for decryption
-		::ReadFile(hSourceFile, pNonce, sizeof(pNonce), &dwBytesRead, NULL);
+		::ReadFile(hSourceFile, iv, sizeof(iv), &dwBytesRead, NULL);
 	}
 	else
 	{
 		// generate number to used once (unique for each file)
-		randombytes_buf(pNonce, sizeof(pNonce));
-		::WriteFile(hTargetFile, pNonce, sizeof(pNonce), &dwBytesWritten, NULL);
+		CryptoPP::AutoSeededRandomPool().GenerateBlock(iv, sizeof(iv));
+		::WriteFile(hTargetFile, iv, sizeof(iv), &dwBytesWritten, NULL);
 	}
+
+	CryptoPP::Salsa20::Encryption salsa;
+	salsa.SetKeyWithIV(pKey, sizeof(pKey), iv);
 	
 	while (::ReadFile(hSourceFile, pData, CHUNK_SIZE, &dwBytesRead, NULL) && dwBytesRead > 0)
 	{
-		crypto_stream_xor(pData, pData, dwBytesRead, pNonce, pKey); // inplace
+		salsa.ProcessData(pData, pData, dwBytesRead);  // inplace
 		::WriteFile(hTargetFile, pData, dwBytesRead, &dwBytesWritten, NULL);
 	}
 
